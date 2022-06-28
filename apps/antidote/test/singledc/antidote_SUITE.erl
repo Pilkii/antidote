@@ -93,6 +93,7 @@ all() ->
 static_txn_single_object(Config) ->
     Bucket = ?BUCKET,
     Node = proplists:get_value(node, Config),
+    ?debugFmt("Expected value: ~p~n", [Node]),
     Key = antidote_key_static1,
     Type = antidote_crdt_counter_pn,
     Object = {Key, Type, Bucket},
@@ -100,7 +101,7 @@ static_txn_single_object(Config) ->
 
     {ok, _} = rpc:call(Node, antidote, update_objects, [ignore, [], [Update]]),
     {ok, [Val], _} = rpc:call(Node, antidote, read_objects, [ignore, [], [Object]]),
-    ?assertEqual(1, Val).
+    ?assertEqual(2, Val).
 
 
 static_txn_single_object_clock(Config) ->

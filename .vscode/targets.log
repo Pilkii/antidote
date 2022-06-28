@@ -1,0 +1,446 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+
+# Make data base, printed on Tue Jun 28 14:25:20 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/markushandel/IdeaProjects/antidote
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+__CFBundleIdentifier = com.microsoft.VSCode
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/vscode-ipc-f7ec14bb-02d5-47dc-957c-7196bc31379b.sock
+# makefile (from `Makefile', line 2)
+COVERPATH = $(shell pwd)/_build/test/cover
+# environment
+VSCODE_CWD = /
+# environment
+PATH = /Users/markushandel/opt/anaconda3/bin:/Users/markushandel/opt/anaconda3/condabin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/markushandel/Development/flutter/bin
+# makefile (from `Makefile', line 1)
+REBAR = $(shell pwd)/rebar3
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.WSE1sLixPi/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+CONDA_EXE = /Users/markushandel/opt/anaconda3/bin/conda
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/markushandel/IdeaProjects/antidote
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /Users/markushandel
+# default
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/markushandel/Library/Application Support/Code/CachedData/4af164ea3a06f701fe3e89a2bcbb421d2026b68f
+# environment
+LOGNAME = markushandel
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+CONDA_DEFAULT_ENV = base
+# environment
+XPC_FLAGS = 0x0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 1
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = markushandel
+# makefile
+.DEFAULT_GOAL := all
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+CONDA_SHLVL = 1
+# default
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/markushandel/Library/Application Support/Code/1.68.0-main.sock
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.7590020.7590026
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x0
+# environment
+COMMAND_MODE = unix2003
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+LC_ALL = C
+# environment
+CONDA_PYTHON_EXE = /Users/markushandel/opt/anaconda3/bin/python
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+_CE_M = 
+# environment
+MAKELEVEL := 0
+# environment
+CONDA_PREFIX = /Users/markushandel/opt/anaconda3
+# environment
+VSCODE_PID = 580
+# environment
+_CE_CONDA = 
+# environment
+LANG = C
+# variable set hash-table stats:
+# Load=71/1024=7%, Rehash=0, Collisions=3/104=3%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777231, inode 7441094): 23 files, no impossibilities.
+
+# 23 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+singledc:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 60):
+	${REBAR} ct --dir apps/antidote/test/singledc --cover_export_name=singledc
+	
+
+relclean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 26):
+	rm -rf _build/default/rel
+	
+
+all: compile
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/5=0%
+
+docker-build:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 83):
+	tmpdir=`mktemp -d` ; \
+	wget "https://raw.githubusercontent.com/AntidoteDB/docker-antidote/master/local-build/Dockerfile" -O "$$tmpdir/Dockerfile" ; \
+	docker build -f $$tmpdir/Dockerfile -t antidotedb:local-build .
+	
+
+.PHONY: rel test relgentlerain docker-build docker-run
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+distclean: clean relclean
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 14):
+	$(REBAR) clean --all
+	
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-06-28 10:16:15
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+test:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 48):
+	${REBAR} eunit
+	
+
+xref: compile
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 77):
+	${REBAR} xref skip_deps=true
+	
+
+docker-run: docker-build
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 88):
+	docker run -d --name antidote -p "8087:8087" antidotedb:local-build
+	
+
+stage:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 45):
+	$(REBAR) release -d
+	
+
+systests: singledc multidc
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dialyzer:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 80):
+	${REBAR} dialyzer
+	
+
+proper:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 51):
+	${REBAR} proper
+	
+
+reltest: rel
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 29):
+	test/release_test.sh
+	
+
+compile:
+#  Implicit rule search has not been done.
+#  Implicit/static pattern stem: `'
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := compile
+# automatic
+# % := 
+# automatic
+# * := 
+# automatic
+# + := 
+# automatic
+# | := 
+# automatic
+# < := 
+# automatic
+# ^ := 
+# automatic
+# ? := 
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/13=8%
+#  commands to execute (from `Makefile', line 8):
+	$(REBAR) compile
+	
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+ 
+relgentlerain: relclean rel
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+# makefile (from `Makefile', line 38)
+# TXN_PROTOCOL = gentlerain
+# variable set hash-table stats:
+# Load=1/32=3%, Rehash=0, Collisions=0/1=0%
+
+multidc:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 67):
+	${REBAR} ct --dir apps/antidote/test/multidc --cover_export_name=multidc
+	
+
+docker-clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 92):
+	docker image rm -f antidotedb:local-build
+	
+
+rel:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 23):
+	$(REBAR) release
+	
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 11):
+	$(REBAR) clean
+	
+
+coverage:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 54):
+	${REBAR} cover --verbose
+	
+
+docs:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 74):
+	${REBAR} doc skip_deps=true
+	
+
+relnocert: relclean rel
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+# makefile (from `Makefile', line 41)
+# NO_CERTIFICATION = true
+# variable set hash-table stats:
+# Load=1/32=3%, Rehash=0, Collisions=0/1=0%
+
+lint:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 33):
+	${REBAR} lint
+	${REBAR} fmt --check
+	
+
+shell: rel
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 17):
+	export NODE_NAME=antidote@127.0.0.1 ; \
+	export COOKIE=antidote ; \
+	export ROOT_DIR_PREFIX=$$NODE_NAME/ ; \
+	_build/default/rel/antidote/bin/antidote console ${ARGS}
+	
+
+check: distclean test reltest dialyzer lint
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=29/1024=3%, Rehash=0, Collisions=1/70=1%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Tue Jun 28 14:25:20 2022
+
+ 

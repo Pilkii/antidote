@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/markushandel/IdeaProjects/antidote'
+/Users/markushandel/IdeaProjects/antidote/rebar3 compile
+make: Leaving directory `/Users/markushandel/IdeaProjects/antidote'
+ 
