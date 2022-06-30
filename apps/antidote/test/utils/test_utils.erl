@@ -83,14 +83,11 @@ init_multi_dc(Suite, Config) ->
 init_prop_single_dc(Suite, Config) ->
     ct:pal("[~p]", [Suite]),
     test_utils:at_init_testsuite(),
-    ct:pal("[86]", [Suite]),
     StartDCs = fun(Nodes) ->
         test_utils:pmap(fun(N) -> {_Status, Node} = test_utils:start_node(N, Config), Node end, Nodes)
                end,
-    ct:pal("[88]", [Suite]),
     [Nodes] = test_utils:pmap( fun(N) -> StartDCs(N) end, [[prop_dev1]] ),
     [Node] = Nodes,
-    ct:pal("[93]", [Suite]),
     [{clusters, [Nodes]} | [{nodes, Nodes} | [{node, Node} | Config]]].
 
 
