@@ -34,6 +34,7 @@
     bucket/1,
     init_single_dc/2,
     init_multi_dc/2,
+    init_prop_single_dc/2,
     get_node_name/1,
     web_ports/1,
     restart_nodes/2,
@@ -79,9 +80,24 @@ init_multi_dc(Suite, Config) ->
     Nodes = hd(Clusters),
     [{clusters, Clusters} | [{nodes, Nodes} | Config]].
 
+init_prop_single_dc(Suite, Config) ->
+    ct:pal("[~p]", [Suite]),
+    test_utils:at_init_testsuite(),
+    ct:pal("[86]", [Suite]),
+    StartDCs = fun(Nodes) ->
+        test_utils:pmap(fun(N) -> {_Status, Node} = test_utils:start_node(N, Config), Node end, Nodes)
+               end,
+    ct:pal("[88]", [Suite]),
+    [Nodes] = test_utils:pmap( fun(N) -> StartDCs(N) end, [[prop_dev1]] ),
+    [Node] = Nodes,
+    ct:pal("[93]", [Suite]),
+    [{clusters, [Nodes]} | [{nodes, Nodes} | [{node, Node} | Config]]].
+
 
 at_init_testsuite() ->
+     ct:pal("[start]"),
     {ok, Hostname} = inet:gethostname(),
+     ct:pal("[works]"),
     case net_kernel:start([list_to_atom("runner@" ++ Hostname), shortnames]) of
         {ok, _} -> ok;
         {error, {already_started, _}} -> ok;
