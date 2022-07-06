@@ -4,15 +4,16 @@
 -export([command/1, initial_state/0, next_state/3,
               precondition/2, postcondition/3]).
 
--record(config, {c}).
+%-record(config, {c}).
+-record(state, {users, rented}).
 % -define(BUCKET, test_utils:bucket(antidote_bucket)).
 
 initial_state() ->
-    {}.
-    % ct:pal("[print me]"),
-    % #config{c=test_utils:init_prop_single_dc(?MODULE, {})}.
-    % #state{users  = [],
-    %        rented = []}.
+    ct:pal("[print me]"),
+    c = test_utils:init_prop_single_dc(?MODULE, {}),
+    % #config{c=test_utils:init_prop_single_dc(?MODULE, {})},
+    #state{users  = [],
+           rented = []}.
 
 %% Picks whether a command should be valid under the current state.
 precondition(_State, {call, _Mod, _Fun, _Args}) -> true.

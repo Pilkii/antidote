@@ -268,6 +268,7 @@ heal_cluster(ANodes, BNodes) ->
 
 
 
+web_ports(prop_dev1) -> 10015;
 web_ports(dev1) -> 10015;
 web_ports(dev2) -> 10025;
 web_ports(dev3) -> 10035;
