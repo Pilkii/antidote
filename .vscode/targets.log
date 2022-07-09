@@ -8,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Tue Jun 28 14:25:20 2022
+# Make data base, printed on Sat Jul  9 09:34:01 2022
 
 # Variables
 
@@ -16,6 +16,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
 ?F = $(notdir $?)
+ 
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
@@ -39,7 +40,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/vscode-ipc-f7ec14bb-02d5-47dc-957c-7196bc31379b.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/vscode-ipc-7d61b579-a53c-44ec-8d33-5832649ac3f2.sock
 # makefile (from `Makefile', line 2)
 COVERPATH = $(shell pwd)/_build/test/cover
 # environment
@@ -55,7 +56,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.WSE1sLixPi/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.OSMA4r3VxK/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -73,7 +74,7 @@ HOME = /Users/markushandel
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/markushandel/Library/Application Support/Code/CachedData/4af164ea3a06f701fe3e89a2bcbb421d2026b68f
+VSCODE_CODE_CACHE_PATH = /Users/markushandel/Library/Application Support/Code/CachedData/30d9c6cd9483b2cc586687151bcbcd635f373630
 # environment
 LOGNAME = markushandel
 # environment
@@ -113,7 +114,7 @@ TMPDIR = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/markushandel/Library/Application Support/Code/1.68.0-main.sock
+VSCODE_IPC_HOOK = /Users/markushandel/Library/Application Support/Code/1.68.1-main.sock
 # makefile
 MAKEFLAGS = Rrqp
 # environment
@@ -121,7 +122,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.7590020.7590026
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.8321250.8321256
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
@@ -149,7 +150,7 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/markushandel/opt/anaconda3
 # environment
-VSCODE_PID = 580
+VSCODE_PID = 3622
 # environment
 _CE_CONDA = 
 # environment
@@ -163,9 +164,10 @@ LANG = C
 
 # Directories
 
-# . (device 16777231, inode 7441094): 23 files, no impossibilities.
+ 
+# . (device 16777230, inode 7441094): 25 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 25 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -334,7 +336,6 @@ compile:
 #  Modification time never checked.
 #  File has not been updated.
 
- 
 relgentlerain: relclean rel
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
@@ -351,6 +352,7 @@ multidc:
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 67):
 	${REBAR} ct --dir apps/antidote/test/multidc --cover_export_name=multidc
+ 
 	
 
 docker-clean:
@@ -441,6 +443,6 @@ check: distclean test reltest dialyzer lint
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Tue Jun 28 14:25:20 2022
+# Finished Make data base on Sat Jul  9 09:34:01 2022
 
  
