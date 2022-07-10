@@ -92,9 +92,7 @@ init_prop_single_dc(Suite, Config) ->
 
 
 at_init_testsuite() ->
-     ct:pal("[start]"),
     {ok, Hostname} = inet:gethostname(),
-     ct:pal("[works]"),
     case net_kernel:start([list_to_atom("runner@" ++ Hostname), shortnames]) of
         {ok, _} -> ok;
         {error, {already_started, _}} -> ok;
