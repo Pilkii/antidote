@@ -2,39 +2,26 @@
 -include_lib("proper/include/proper.hrl").
 
 %% Model Callbacks
--export([command/1, initial_state/0, next_state/3,
+-export([command/1, initial_state/0, next_state/3, 
          precondition/2, postcondition/3]).
 
--record(state, {count, node, object}).
+-record(state, {count, node, object, clock}).
 
 %%%%%%%%%%%%%%%%%%
 %%% PROPERTIES %%%
 %%%%%%%%%%%%%%%%%%
 prop_test() ->
+    Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+    persistent_term:put(node, Node),
     ?FORALL(Cmds, commands(?MODULE),
             begin
                 {History, State, Result} = run_commands(?MODULE, Cmds),
-                ct:pal("result [~p]", [Result]),
+                 io:format("result : ~p ~n", [Result]),
                 ?WHENFAIL(io:format("History: ~p\nState: ~p\nResult: ~p\n",
                                     [History,State,Result]),
                           aggregate(command_names(Cmds), Result =:= ok))
-            end).
+            end).    
 
-prop_test_stless() ->
-    Node = proplists:get_value(node, test_utils:init_prop_single_dc(what, #{})),
-    Bucket = test_utils:bucket(antidote_bucket),
-    Type = antidote_crdt_counter_pn,
-    ?FORALL(Var, {op(), int()}, 
-        begin
-            Key = list_to_atom("antidote_key_static_prop" ++ float_to_list(rand:uniform())), %to avoid using the same key twice
-            Object = {Key, Type, Bucket},
-            {_, Int} = Var, 
-            Update = {Object, increment, Int},
-            {ok, _} = rpc:call(Node, antidote, update_objects, [ignore, [], [Update]]),
-            {ok, [Val], _} = rpc:call(Node, antidote, read_objects, [ignore, [], [Object]]),
-            Val =:= Int
-        end
-    ).
 
 %%%%%%%%%%%%%
 %%% MODEL %%%
@@ -44,10 +31,10 @@ initial_state() ->
     Bucket = test_bucket, % test_utils:bucket(antidote_bucket), doesnt work with this
     Type = antidote_crdt_counter_pn,
     Key = antidote_key_static_prop_stful,
-    Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+    Node = persistent_term:get(node),
     Object = {Key, Type, Bucket},
-    {ok, [Val], _} = rpc:call(Node, antidote, read_objects, [ignore, [], [Object]]),
-    State = #state{count = Val, node = Node, object = Object},
+    {ok, [Val], Clock} = rpc:call(Node, antidote, read_objects, [ignore, [], [Object]]),
+    State = #state{count = Val, node = Node, object = Object, clock = Clock},
     State.
 
 %% @doc List of possible commands to run against the system
@@ -55,8 +42,8 @@ command(State) ->
     Update = {State#state.object, op(), int()},
     Node = State#state.node,
     oneof([
-        {call, rpc, call, [Node, antidote, update_objects, [ignore, [], [Update]]]},
-        {call, rpc, call, [Node, antidote, read_objects, [ignore, [], [State#state.object]]]}
+        {call, rpc, call, [Node, antidote, update_objects, [State#state.clock, [], [Update]]]},
+        {call, rpc, call, [Node, antidote, read_objects, [State#state.clock, [], [State#state.object]]]}
     ]).
 
 %% @doc Determines whether a command should be valid under the
@@ -77,15 +64,20 @@ postcondition(State, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
 
 %% @doc Assuming the postcondition for a call was true, update the model
 %% accordingly for the test to proceed.
-next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
-    NewState = State#state{count = State#state.count + Int},
+next_state(State, Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
+    io:format("result when update_objects called: ~p ~n", [Res]),
+    {ok, Clock} = Res,
+    NewState = State#state{count = State#state.count + Int, clock = Clock},
     NewState;
-next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
-    NewState = State#state{count = State#state.count - Int},
+next_state(State, Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
+    io:format("result when update_objects called: ~p ~n", [Res]),
+    {ok, Clock} = Res,
+    NewState = State#state{count = State#state.count - Int, clock = Clock},
     NewState;
-next_state(State, _Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
-    NewState = State,
-    NewState.
+next_state(State, Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
+    % {_X, _Y, _Z} = Res,
+    io:format("result when read objects called: ~p ~n", [Res]),
+    State.
 
 %%%%%%%%%%%%%%%%%%
 %%%%% HELPERS %%%%

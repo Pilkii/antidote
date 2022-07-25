@@ -80,8 +80,7 @@ init_multi_dc(Suite, Config) ->
     Nodes = hd(Clusters),
     [{clusters, Clusters} | [{nodes, Nodes} | Config]].
 
-init_prop_single_dc(Suite, Config) ->
-    ct:pal("[~p]", [Suite]),
+init_prop_single_dc(_Suite, Config) ->
     test_utils:at_init_testsuite(),
     StartDCs = fun(Nodes) ->
         test_utils:pmap(fun(N) -> {_Status, Node} = test_utils:start_node(N, Config), Node end, Nodes)
@@ -164,7 +163,7 @@ start_node(Name, Config) ->
 
             {connect, Node};
         {error, already_started, Node} ->
-            ct:log("Node ~p already started, reusing node", [Node]),
+            % ct:log("Node ~p already started, reusing node", [Node]),
             {ready, Node};
         {error, Reason, Node} ->
             ct:pal("Error starting node ~w, reason ~w, will retry", [Node, Reason]),
