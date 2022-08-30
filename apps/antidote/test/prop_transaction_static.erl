@@ -64,19 +64,18 @@ postcondition(State, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
 
 %% @doc Assuming the postcondition for a call was true, update the model
 %% accordingly for the test to proceed.
-next_state(State, Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
-    io:format("result when update_objects called: ~p ~n", [Res]),
-    {ok, Clock} = Res,
+
+next_state(State, {ok, Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
     NewState = State#state{count = State#state.count + Int, clock = Clock},
     NewState;
-next_state(State, Res, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
-    io:format("result when update_objects called: ~p ~n", [Res]),
-    {ok, Clock} = Res,
+next_state(State, {ok, Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
     NewState = State#state{count = State#state.count - Int, clock = Clock},
     NewState;
-next_state(State, Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
-    % {_X, _Y, _Z} = Res,
-    io:format("result when read objects called: ~p ~n", [Res]),
+%% called when next state is not called by us 
+next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, _]}) ->
+    State;
+
+next_state(State, _Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
     State.
 
 %%%%%%%%%%%%%%%%%%
