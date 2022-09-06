@@ -8,19 +8,19 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This program built for i386-apple-darwin11.3.0
  
 
-# Make data base, printed on Mon Aug 29 10:37:08 2022
+# Make data base, printed on Tue Sep  6 10:45:58 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
+ 
 # automatic
 ?F = $(notdir $?)
 # environment
 VSCODE_LOG_NATIVE = false
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
- 
 # automatic
 @D = $(patsubst %/,%,$(dir $@))
 # automatic
@@ -40,7 +40,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/vscode-ipc-596450f5-cec5-4380-bca0-4c91a6282ab7.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/_0/9811pm592lddnmqbldlxy2w40000gn/T/vscode-ipc-444837a4-7b93-4ff5-8fc5-208381cf2503.sock
 # makefile (from `Makefile', line 2)
 COVERPATH = $(shell pwd)/_build/test/cover
 # environment
@@ -56,7 +56,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.fT5TkOYOTj/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.PFkSJOjrfI/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -150,7 +150,7 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/markushandel/opt/anaconda3
 # environment
-VSCODE_PID = 537
+VSCODE_PID = 667
 # environment
 _CE_CONDA = 
 # environment
@@ -158,13 +158,14 @@ LANG = C
 # variable set hash-table stats:
 # Load=71/1024=7%, Rehash=0, Collisions=3/104=3%
 
+ 
 # Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
 
-# . (device 16777234, inode 7441094): 26 files, no impossibilities.
+# . (device 16777230, inode 7441094): 26 files, no impossibilities.
 
 # 26 files, no impossibilities in 1 directories.
 
@@ -286,7 +287,6 @@ dialyzer:
 	
 
 proper:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -329,6 +329,7 @@ compile:
 #  commands to execute (from `Makefile', line 8):
 	$(REBAR) compile
 	
+ 
 
 # Not a target:
 .DEFAULT:
@@ -442,6 +443,6 @@ check: distclean test reltest dialyzer lint
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Mon Aug 29 10:37:08 2022
+# Finished Make data base on Tue Sep  6 10:45:58 2022
 
  

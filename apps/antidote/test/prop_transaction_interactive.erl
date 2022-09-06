@@ -11,6 +11,8 @@
 % %%% PROPERTIES %%%
 % %%%%%%%%%%%%%%%%%%
 % prop_test() ->
+%     Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+%     persistent_term:put(node, Node),
 %     ?FORALL(Cmds, commands(?MODULE),
 %             begin
 %                 {History, State, Result} = run_commands(?MODULE, Cmds),
@@ -19,14 +21,21 @@
 %                           aggregate(command_names(Cmds), Result =:= ok))
 %             end).
 
-% prop_test_parallel() ->
-%     ?FORALL(Cmds, parallel_commands(?MODULE),
-%             begin
-%                 {History, State, Result} = run_parallel_commands(?MODULE, Cmds),
-%                 ?WHENFAIL(io:format("History: ~p\nState: ~p\nResult: ~p\n",
-%                                     [History,State,Result]),
-%                           aggregate(command_names(Cmds), Result =:= ok))
-%             end).
+% % prop_test_parallel() ->
+% %     Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+% %     persistent_term:put(node, Node),
+% %     ?FORALL(Cmds, parallel_commands(?MODULE),
+% %             begin
+% %                 {History, State, Result} = run_parallel_commands(?MODULE, Cmds),
+% %                 ?WHENFAIL(io:format("=======~n"
+% %                         "Failing command sequence:~n~p~n"
+% %                         "At state: ~p~n"
+% %                         "=======~n"
+% %                         "Result: ~p~n"
+% %                         "History: ~p~n",
+% % [                       Cmds,State,Result,History]), 
+% %                     aggregate(command_names(Cmds), Result =:= ok))
+% %             end).
 
 % %%%%%%%%%%%%%
 % %%% MODEL %%%
@@ -36,8 +45,8 @@
 %     % Bucket = test_utils:bucket(antidote_bucket), with this bucket it does not work!!
 %     Bucket = my_bucket,
 %     Type = antidote_crdt_counter_pn,
-%     Key = antidote_key_static_prop_stful,
-%     Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+%     Key = antidote_key_interactive_prop_stful,
+%     Node = persistent_term:get(node),
 %     Object = {Key, Type, Bucket},
 %     {ok, TxId} = rpc:call(Node, antidote, start_transaction, [ignore, []]),
 %     {ok, [Val]} = rpc:call(Node, antidote, read_objects, [[Object], TxId]),
@@ -64,22 +73,26 @@
 % %% @doc Given the state `State' *prior* to the call
 % %% `{call, Mod, Fun, Args}', determine whether the result
 % %% `Res' (coming from the actual system) makes sense.
-% postcondition(_State, {call, _Mod, _Fun, [_, _, update_objects, _]}, _Res) ->
-%     true;
-% postcondition(State, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
+% postcondition(_S=#state{count = _L, node = _N, object = _O, id = _ID}, {call, _Mod, _Fun, [_, _, update_objects, _]}, Res) ->
+%     % {ok, [Val]} = rpc:call(N, antidote, read_objects, [[O], ID]),
+%     % L =:= Val;
+%     Res =:= ok;
+% postcondition(_S=#state{count = L, node = _N}, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
 %     {ok, [Int]} = Res,
-%     State#state.count =:= Int.
+%     L =:= Int;
+% postcondition(_State, {call, _Mod, _Fun, [_, _, _, _]}, _Res) ->
+%     true.
 
 
 % %% @doc Assuming the postcondition for a call was true, update the model
 % %% accordingly for the test to proceed.
-% next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, [[{_, decrement, Int}], _]]}) ->
-%     NewState = State#state{count = State#state.count - Int},
+% next_state(S=#state{count = L, node = _N}, _Res, {call, _Mod, _Fun, [_, _, update_objects, [[{_, decrement, Int}], _]]}) ->
+%     NewState = S#state{count = L - Int},
 %     NewState;
-% next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, [[{_, increment, Int}], _]]}) ->
-%     NewState = State#state{count = State#state.count + Int},
+% next_state(S=#state{count = L, node = _N}, _Res, {call, _Mod, _Fun, [_, _, update_objects, [[{_, increment, Int}], _]]}) ->
+%     NewState = S#state{count = L + Int},
 %     NewState;
-% next_state(State, _Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
+% next_state(State, _Res, {call, _Mod, _Fun, [_, _, _, _]}) ->
 %     NewState = State,
 %     NewState.
 

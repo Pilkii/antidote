@@ -22,6 +22,24 @@
 %                           aggregate(command_names(Cmds), Result =:= ok))
 %             end).    
 
+% % prop_test_parallel() ->
+% %     Node = proplists:get_value(node, test_utils:init_prop_single_dc(?MODULE, #{})),
+% %     persistent_term:put(node, Node),
+% %     ?FORALL(Cmds, parallel_commands(?MODULE),
+% %             begin
+% %                 {History, State, Result} = run_parallel_commands(?MODULE, Cmds),
+% %                  io:format("result : ~p ~n", [Result]),
+% %                 ?WHENFAIL(io:format("=======~n"
+% %                         "Failing command sequence:~n~p~n"
+% %                         "At state: ~p~n"
+% %                         "=======~n"
+% %                         "Result: ~p~n"
+% %                         "History: ~p~n",
+% %                         [Cmds,State,Result,History]), 
+% %                     aggregate(command_names(Cmds), Result =:= ok))
+% %             end).    
+
+
 
 % %%%%%%%%%%%%%
 % %%% MODEL %%%
@@ -39,7 +57,7 @@
 
 % %% @doc List of possible commands to run against the system
 % command(State) ->
-%     Update = {State#state.object, op(), int()},
+%     Update = {State#state.object, op(), val()},
 %     Node = State#state.node,
 %     oneof([
 %         {call, rpc, call, [Node, antidote, update_objects, [State#state.clock, [], [Update]]]},
@@ -55,21 +73,27 @@
 % %% @doc Given the state `State' *prior* to the call
 % %% `{call, Mod, Fun, Args}', determine whether the result
 % %% `Res' (coming from the actual system) makes sense.
-% postcondition(_State, {call, _Mod, _Fun, [_, _, update_objects, _]}, _Res) ->
-%     true;
-% postcondition(State, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
-%     {ok, [Int], _} = Res,
-%     State#state.count =:= Int.
-
+% postcondition(#state{node = Node, object = Object, count = Count, clock = Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}, {ok, _}) ->
+%     {ok, [Val], _Clock} = rpc:call(Node, antidote, read_objects, [Clock, [], [Object]]),
+%     io:format(" increment by ~p ~n ", [Int]),
+%     Count + Int =:= Val;
+% postcondition(#state{node = Node, object = Object, count = Count, clock = Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}, {ok, _}) ->
+%     {ok, [Val], _Clock} = rpc:call(Node, antidote, read_objects, [Clock, [], [Object]]),
+%     io:format("decrement by ~p ~n ", [Int]),
+%     Count - Int =:= Val ;
+% postcondition(#state{count = Count}, {call, _Mod, _Fun, [_, _, read_objects, _]}, {ok, [Val], _}) ->
+%     Count =:= Val;
+% postcondition(_, {call, _Mod, _Fun, _Args}, _Res) ->
+%     false.
 
 % %% @doc Assuming the postcondition for a call was true, update the model
 % %% accordingly for the test to proceed.
 
-% next_state(State, {ok, Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
-%     NewState = State#state{count = State#state.count + Int, clock = Clock},
+% next_state(State=#state{count = Count}, {ok, NewClock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, increment, Int}]]]}) ->
+%     NewState = State#state{count = Count + Int, clock = NewClock},
 %     NewState;
-% next_state(State, {ok, Clock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
-%     NewState = State#state{count = State#state.count - Int, clock = Clock},
+% next_state(State=#state{count = Count}, {ok, NewClock}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, decrement, Int}]]]}) ->
+%     NewState = State#state{count = Count - Int, clock = NewClock},
 %     NewState;
 % %% called when next state is not called by us 
 % next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, _]}) ->
@@ -87,3 +111,6 @@
 %         increment,
 %         decrement
 %         ]).
+
+% val() ->
+%     ?SIZED(Size, resize(100*Size, int())).
