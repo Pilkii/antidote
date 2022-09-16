@@ -35,6 +35,7 @@
     init_single_dc/2,
     init_multi_dc/2,
     init_prop_single_dc/2,
+    init_prop_multi_dc/2,
     get_node_name/1,
     web_ports/1,
     restart_nodes/2,
@@ -89,6 +90,14 @@ init_prop_single_dc(_Suite, Config) ->
     [Node] = Nodes,
     [{clusters, [Nodes]} | [{nodes, Nodes} | [{node, Node} | Config]]].
 
+init_prop_multi_dc(Suite, Config) ->
+    io:format("Suite: [~p]", [Suite]),
+    at_init_testsuite(),
+     io:format("still running: [~p]", [Suite]),
+    Clusters = test_utils:set_up_clusters_common([{suite_name, ?MODULE} | Config]),
+     io:format("running now: [~p]", [Suite]),
+    Nodes = hd(Clusters),
+    [{clusters, Clusters} | [{nodes, Nodes} | Config]].
 
 at_init_testsuite() ->
     {ok, Hostname} = inet:gethostname(),
@@ -283,7 +292,7 @@ web_ports(dcdev3) -> 10235.
 
 %% Build clusters for all test suites.
 set_up_clusters_common(Config) ->
-    ClusterAndDcConfiguration = [[dev1, dev2], [dev3], [dev4]],
+    ClusterAndDcConfiguration = [[dev1, dev2], [dev3], [dev4], [prop_dev1]],
 
     StartDCs = fun(Nodes) ->
         %% start each node
