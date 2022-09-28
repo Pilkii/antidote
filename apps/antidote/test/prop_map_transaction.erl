@@ -16,6 +16,7 @@ prop_map_test() ->
     ?FORALL(Cmds, commands(?MODULE),
             begin
                 {History, State, Result} = run_commands(?MODULE, Cmds),
+                {ok, _} = rpc:call(Node, antidote, update_objects, [State#state.clock, [], [{State#state.object,reset, {}}]]),
                 io:format("result [~p]", [Result]),
                 ?WHENFAIL(io:format("History: ~p\nState: ~p\nResult: ~p\n",
                                     [History,State,Result]),
