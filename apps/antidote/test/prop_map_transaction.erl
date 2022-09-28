@@ -62,9 +62,9 @@ postcondition(#state{map = Map, node = Node, clock = Clock, object = Object}, {c
     {ok, [Val], _} = rpc:call(Node, antidote, read_objects, [Clock, [], [Object]]),
     NewMap = adjustMap(Map, {Op, OpArg}),
     MapInList = maps:to_list(NewMap),
-    io:format("postcond check with  ~p ~n ~p ~n", [Op, OpArg]),
-    io:format("map pre operation: ~p ~n", [Map]),
-    io:format("ourmap: ~p ~n antidotemap: ~p ~n", [MapInList, Val]),
+    io:format("postcondition check. We had the following Operation done:  ~p, with this argument: ~p ~n", [Op, OpArg]),
+    io:format("map of model pre operation: ~p ~n", [Map]),
+    io:format("map of model post operation: ~p ~n, the map antidote has: ~p ~n", [MapInList, Val]),
     lists:subtract(MapInList, Val) =:= lists:subtract(Val, MapInList);
 postcondition(State, {call, _Mod, _Fun, [_, _, read_objects, _]}, Res) ->
     {ok, [Val], _} = Res,
@@ -120,6 +120,17 @@ adjustMap(Map, {remove, [H | T]}) ->
 adjustMap(Map, {update, {{_Key, _Type}, []}}) ->
     Map;
 
+adjustMap(Map, {update, {{Key, antidote_crdt_counter_pn}, Op}}) ->
+    FullKey = {Key, antidote_crdt_counter_pn},
+    IsKey = maps:is_key(FullKey, Map),
+    if 
+        IsKey ->
+             Value = maps:get(FullKey, Map),
+             NewCounter = prop_transaction_static:adjustCounter(Value, Op);
+        true -> 
+             NewCounter = prop_transaction_static:adjustCounter(0, Op)
+    end,
+    maps:put(FullKey, NewCounter, Map);
 adjustMap(Map, {update, {{Key, antidote_crdt_set_aw}, Op}}) ->
     FullKey = {Key, antidote_crdt_set_aw},
     IsKey = maps:is_key(FullKey, Map),
@@ -184,8 +195,7 @@ op(State, Size) ->
             Removes2 = lists:usort(Removes),
             Updates2 = removeDuplicateKeys(Updates, Removes2),
             {State#state.object, batch, {Updates2, Removes2}}
-        end),
-        {State#state.object, reset, {}}
+        end)
   ]).
 
 recOp(Size) -> 
@@ -214,9 +224,9 @@ removeDuplicateKeys([{Key, Op}|Rest], Keys) ->
 nestedOp(Size) ->
   oneof(
     [
-      % {{key(), antidote_crdt_counter_fat}, prop_counter_fat:op()},
       % {{key(), antidote_crdt_set_aw}, prop_set_aw:op()},
-      {{key(), antidote_crdt_set_aw}, setOp()}
+      {{key(), antidote_crdt_set_aw}, setOp()},
+      {{key(), antidote_crdt_counter_pn}, counterOp()}
     ]
     ++
     if
@@ -242,6 +252,12 @@ setOp() ->
     {remove_all, list(set_element())},
     {reset, {}}
   ]).
+
+counterOp() ->
+    oneof([
+        {increment, int()},
+        {decrement, int()}
+        ]).
 
 set_element() ->
   oneof([a, b]).

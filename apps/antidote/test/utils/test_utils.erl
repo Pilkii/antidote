@@ -90,14 +90,15 @@ init_prop_single_dc(_Suite, Config) ->
     [Node] = Nodes,
     [{clusters, [Nodes]} | [{nodes, Nodes} | [{node, Node} | Config]]].
 
-init_prop_multi_dc(Suite, Config) ->
-    io:format("Suite: [~p]", [Suite]),
-    at_init_testsuite(),
-     io:format("still running: [~p]", [Suite]),
-    Clusters = test_utils:set_up_clusters_common([{suite_name, ?MODULE} | Config]),
-     io:format("running now: [~p]", [Suite]),
-    Nodes = hd(Clusters),
-    [{clusters, Clusters} | [{nodes, Nodes} | Config]].
+init_prop_multi_dc(_Suite, Config) ->
+    test_utils:at_init_testsuite(),
+    StartDCs = fun(Nodes) ->
+        test_utils:pmap(fun(N) -> {_Status, Node} = test_utils:start_node(N, Config), Node end, Nodes)
+               end,
+    [Nodes1] = test_utils:pmap( fun(N) -> StartDCs(N) end, [[prop_dev1]] ),
+    [Node1] = Nodes1,
+    [Nodes2] = test_utils:pmap( fun(N) -> StartDCs(N) end, [[prop_dev2]] ),
+    [{clusters, [Nodes1]} | [{nodes, lists:append(Nodes1, Nodes2)} | [{node, Node1} | Config]]].
 
 at_init_testsuite() ->
     {ok, Hostname} = inet:gethostname(),
@@ -274,11 +275,12 @@ heal_cluster(ANodes, BNodes) ->
 
 
 
-web_ports(prop_dev1) -> 10015;
 web_ports(dev1) -> 10015;
 web_ports(dev2) -> 10025;
 web_ports(dev3) -> 10035;
 web_ports(dev4) -> 10045;
+web_ports(prop_dev1) -> 10055;
+web_ports(prop_dev2) -> 10065;
 web_ports(clusterdev1) -> 10115;
 web_ports(clusterdev2) -> 10125;
 web_ports(clusterdev3) -> 10135;
