@@ -58,7 +58,7 @@ precondition(_State, {call, _Mod, _Fun, _Args}) ->
 %% `{call, Mod, Fun, Args}', determine whether the result
 %% `Res' (coming from the actual system) makes sense.
 
-postcondition(#state{map = Map, node = Node, clock = Clock, object = Object}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, Op, OpArg}]]]}, {ok, _}) ->
+postcondition(#state{map = Map, node = Node, object = Object}, {call, _Mod, _Fun, [_, _, update_objects, [_, _, [{_, Op, OpArg}]]]}, {ok, Clock}) ->
     {ok, [Val], _} = rpc:call(Node, antidote, read_objects, [Clock, [], [Object]]),
     NewMap = adjustMap(Map, {Op, OpArg}),
     MapInList = maps:to_list(NewMap),
@@ -88,10 +88,8 @@ next_state(State, {ok, _, Clock}, {call, _Mod, _Fun, [_, _, read_objects, _]}) -
     io:format("read "),
     NewState = State#state{clock = Clock},
     NewState;
-next_state(State, _Res, {call, _Mod, _Fun, [_, _, update_objects, _]}) ->
-    State;
-next_state(State, _Res, {call, _Mod, _Fun, [_, _, read_objects, _]}) ->
-    io:format("read-else   "),
+    % State#state{clock = Clock};
+next_state(State, {var, _}, {call, _Mod, _Fun, _}) ->
     State.
 
 %%%%%%%%%%%%%%%%%%
